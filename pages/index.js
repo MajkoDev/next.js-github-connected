@@ -1,5 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
+
+import { ApolloClient, createHttpLink, InMemoryCache, gql } from "@apollo/client";
+import { setContext } from '@apollo/client/link/context';
+
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
