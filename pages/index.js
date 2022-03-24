@@ -11,7 +11,7 @@ import { setContext } from "@apollo/client/link/context";
 
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+export default function Home({ pinnedItems }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -26,12 +26,16 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href='link' className={styles.card}>
-            <h2>Title of Repository &rarr;</h2>
-            <h4 className={styles.date}>Created at</h4>
-            <h4 className={styles.date}>Updated at</h4>
-            <p>Description of Repository</p>
-          </a>
+          {pinnedItems.map((item) => {
+            return (
+              <a key={item.id} href={item.url} className={styles.card}>
+                <h2>{item.name} &rarr;</h2>
+                <h4 className={styles.date}>Created at {item.createdAt}</h4>
+                <h4 className={styles.date}>Updated at {item.updatedAt}</h4>
+                <p>{item.description}</p>
+              </a>
+            );
+          })}
         </div>
       </main>
 
@@ -98,7 +102,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      pinnedItems
-    }
+      pinnedItems,
+    },
   };
 }
