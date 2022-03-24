@@ -1,8 +1,13 @@
 import Head from "next/head";
 import Image from "next/image";
 
-import { ApolloClient, createHttpLink, InMemoryCache, gql } from "@apollo/client";
-import { setContext } from '@apollo/client/link/context';
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  gql,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 import styles from "../styles/Home.module.css";
 
@@ -46,9 +51,8 @@ export default function Home() {
 }
 
 export async function getStaticProps() {
-  
   const httpLink = createHttpLink({
-    uri: 'https://api.github.com/graphql',
+    uri: "https://api.github.com/graphql",
   });
 
   const authLink = setContext((_, { headers }) => {
@@ -56,18 +60,45 @@ export async function getStaticProps() {
       headers: {
         ...headers,
         authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
-      }
-    }
+      },
+    };
   });
-  
+
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
   });
+
+  const { data } = await client.query({
+    query: gql`
+      {
+        user(login: "MajkoDev") {
+          pinnedItems {
+            totalCount
+            edges {
+              node {
+                ... on Repository {
+                  id
+                  name
+                  url
+                  description
+                  createdAt
+                  updatedAt
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+  });
+
+  const { user } = data;
+  const pinnedItems = user.pinnedItems.edges.map((edge) => edge.node);
 
   return {
     props: {
+      pinnedItems
     }
-  }
+  };
 }
- 
