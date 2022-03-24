@@ -94,14 +94,24 @@
 
 .card h2 {
   margin: 0 0 1rem 0;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
 }
 
 .card p {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
+
+.card h4{
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+
+
+
 
 .logo {
   height: 1em;
